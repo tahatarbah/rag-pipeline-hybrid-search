@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Set up</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="frame narrow">
+      <div class="auth-logo"><span class="mark">✦</span></div>
+      <form class="panel" id="setup-form">
+        <h1 style="margin:0 0 8px;font-size:22px;text-align:center">Create your workspace</h1>
+        <p class="hint" style="text-align:center">Runs only on this server. Nothing is sent to a vendor.</p>
+        <label>Organization name <input name="org_name" required placeholder="Northstar" value="Northstar" /></label>
+        <label>Admin name <input name="admin_name" required /></label>
+        <label>Admin email <input name="admin_email" type="email" required /></label>
+        <label>Password (8+ characters) <input name="password" type="password" minlength="8" required /></label>
+        <label class="check"><input type="checkbox" name="load_demo" checked /> Load demo handbook + sample people</label>
+        <p class="hint" id="health-note"></p>
+        <p class="error" id="err"></p>
+        <button class="btn primary" type="submit" style="width:100%">Continue</button>
+      </form>
+    </div>
+    <script>
+      fetch("/api/health")
+        .then((r) => r.json())
+        .then((h) => {
+          const note = document.getElementById("health-note");
+          const model = h.ollama_model || "llama3.2";
+          if (!h.ollama) {
+            note.textContent =
+              `Chat model missing — answers will quote documents until Ollama is running, then run ollama pull ${model}.`;
+          } else if (!h.ollama_model_ready) {
+            note.textContent =
+              `Chat model missing — answers will quote documents until you run ollama pull ${model}.`;
+          } else {
+            note.textContent = `Local chat model ${model} is ready.`;
+          }
+        })
+        .catch(() => {});
+      document.getElementById("setup-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const err = document.getElementById("err");
+        err.textContent = "";
+        const body = {
+          org_name: form.org_name.value,
+          admin_name: form.admin_name.value,
+          admin_email: form.admin_email.value,
+          password: form.password.value,
+          load_demo: form.load_demo.checked,
+        };
+        const res = await fetch("/api/auth/setup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          err.textContent = data.detail || "Setup failed";
+          return;
+        }
+        location.href = "/";
+      });
+    </script>
+  </body>
+</html>

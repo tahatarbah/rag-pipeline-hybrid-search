@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Chat</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body class="gpt">
+    <button type="button" class="gpt-menu" id="sidebar-toggle" aria-label="Open sidebar">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+    <aside class="gpt-sidebar" id="sidebar">
+      <button type="button" class="gpt-new" id="new-chat">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 5v14M5 12h14" />
+        </svg>
+        New chat
+      </button>
+      <label class="gpt-space">
+        <span>Workspace</span>
+        <select id="space-select"></select>
+      </label>
+      <p class="gpt-label">Chats</p>
+      <ul class="gpt-threads" id="thread-list"></ul>
+      <div class="gpt-account">
+        <div class="gpt-avatar" id="who-avatar">A</div>
+        <div class="gpt-account-meta">
+          <strong id="who-name">Account</strong>
+          <span id="who"></span>
+        </div>
+        <div class="gpt-account-links">
+          <a href="/admin" id="admin-link" hidden>Admin</a>
+          <a href="/lab" id="lab-link" hidden>Lab</a>
+          <button type="button" id="logout">Log out</button>
+        </div>
+      </div>
+    </aside>
+    <div class="gpt-scrim" id="scrim" hidden></div>
+    <main class="gpt-main">
+      <header class="gpt-top">
+        <select id="model-select" aria-label="Model"></select>
+      </header>
+      <div class="gpt-scroll" id="messages">
+        <div class="gpt-empty" id="empty">
+          <div class="gpt-logo" aria-hidden="true">
+            <svg viewBox="0 0 32 32" width="40" height="40">
+              <circle cx="16" cy="16" r="15" fill="#10a37f" />
+              <path
+                fill="#fff"
+                d="M16.2 7.2c.9 0 1.7.2 2.4.7l.2.1 1.9-1.1.8 1.4-1.9 1.1c.6.8.9 1.8.9 2.8 0 .3 0 .6-.1.8h.1c1.9 0 3.4 1.5 3.4 3.4 0 1.6-1.1 2.9-2.6 3.3v.1c0 1.9-1.5 3.4-3.4 3.4-.9 0-1.7-.3-2.3-.9l-.1.1-1.9 1.1-.8-1.4 1.9-1.1c-.6-.8-.9-1.8-.9-2.8 0-.3 0-.6.1-.8h-.1c-1.9 0-3.4-1.5-3.4-3.4 0-1.6 1.1-2.9 2.6-3.3v-.1c0-1.9 1.5-3.4 3.4-3.4z"
+              />
+            </svg>
+          </div>
+          <h1>What can I help with?</h1>
+          <p>Ask anything in your internal docs. Answers stay in this chat.</p>
+          <div class="gpt-suggestions">
+            <button type="button" class="chip" data-q="What is PTO-12?">What is PTO-12?</button>
+            <button type="button" class="chip" data-q="How many vacation days do full-time employees get?">Vacation days</button>
+            <button type="button" class="chip" data-q="Who is on-call for a SEV-1?">Who is on-call?</button>
+            <button type="button" class="chip" data-q="When is the expense report deadline?">Expense deadline</button>
+          </div>
+        </div>
+      </div>
+      <form class="gpt-composer" id="composer">
+        <div class="gpt-input">
+          <textarea id="input" rows="1" placeholder="Ask anything" required></textarea>
+          <button class="gpt-send" type="submit" aria-label="Send">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 4l-8 8h5v8h6v-8h5z" />
+            </svg>
+          </button>
+        </div>
+        <p class="gpt-foot">Answers are grounded in spaces you can access.</p>
+      </form>
+    </main>
+    <script src="/static/chat.js"></script>
+  </body>
+</html>

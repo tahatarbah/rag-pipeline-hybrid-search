@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="frame">
+      <header class="top">
+        <div class="brand">
+          <span class="mark">D</span>
+          <div>
+            <p class="kicker">Organization</p>
+            <h1>Admin</h1>
+          </div>
+        </div>
+        <nav class="nav">
+          <a href="/">Chat</a>
+          <a href="/lab">Lab</a>
+          <a href="/api/admin/audit.csv">Audit CSV</a>
+        </nav>
+      </header>
+      <div class="admin-grid">
+        <section class="panel">
+          <h2>Health</h2>
+          <div id="health"></div>
+        </section>
+        <section class="panel">
+          <h2>Token usage</h2>
+          <div id="usage"></div>
+        </section>
+        <section class="panel">
+          <h2>Models (free / premium)</h2>
+          <div id="models"></div>
+          <form id="model-form" class="stack">
+            <input name="display_name" placeholder="Display name" required />
+            <select name="provider">
+              <option value="extractive">Extractive (free quotes)</option>
+              <option value="ollama">Local Ollama</option>
+              <option value="openai_compat">Paid OpenAI-compatible</option>
+            </select>
+            <input name="model_id" placeholder="llama3.2 or gpt-4o-mini" required />
+            <select name="tier">
+              <option value="free">free</option>
+              <option value="premium">premium</option>
+            </select>
+            <input name="api_base" placeholder="API base (paid only)" />
+            <input name="api_key" placeholder="API key (paid only)" />
+            <button class="btn primary" type="submit">Add model</button>
+          </form>
+        </section>
+        <section class="panel">
+          <h2>People</h2>
+          <div id="users"></div>
+          <form id="user-form" class="stack">
+            <input name="name" placeholder="Name" required />
+            <input name="email" type="email" placeholder="Email" required />
+            <input name="password" type="password" minlength="8" placeholder="Password" required />
+            <select name="tier">
+              <option value="free">free</option>
+              <option value="premium">premium</option>
+            </select>
+            <button class="btn primary" type="submit">Add user</button>
+          </form>
+        </section>
+        <section class="panel">
+          <h2>Spaces</h2>
+          <div id="spaces"></div>
+          <form id="space-form" class="stack">
+            <input name="name" placeholder="Space name" required />
+            <button class="btn primary" type="submit">Create space</button>
+          </form>
+          <form id="member-form" class="stack">
+            <select id="member-space"></select>
+            <input name="email" type="email" placeholder="Member email" required />
+            <select name="role">
+              <option value="viewer">viewer</option>
+              <option value="editor">editor</option>
+              <option value="admin">admin</option>
+            </select>
+            <button class="btn ghost" type="submit">Add member</button>
+          </form>
+          <div class="actions">
+            <button class="btn ghost" type="button" id="demo-btn">Load demo handbook</button>
+            <button class="btn ghost" type="button" id="reindex-btn">Reindex space</button>
+          </div>
+          <form id="upload-form" class="stack">
+            <select id="upload-space"></select>
+            <div class="dropzone" id="dropzone">
+              Drop PDF, Word, Markdown, or text here
+              <input type="file" name="files" id="file-input" multiple accept=".md,.txt,.pdf,.docx" />
+            </div>
+            <button class="btn ghost" type="submit">Upload and index</button>
+          </form>
+          <div class="progress" id="ingest-bar" hidden>
+            <div class="progress-fill" id="ingest-fill"></div>
+          </div>
+          <p class="hint" id="job-status"></p>
+          <p class="hint" id="inbox-hint"></p>
+          <div id="members"></div>
+        </section>
+      </div>
+    </div>
+    <script src="/static/admin.js"></script>
+  </body>
+</html>

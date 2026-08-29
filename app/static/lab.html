@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Retrieval lab — Internal Docs</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="frame">
+      <header class="top">
+        <div class="brand">
+          <span class="mark">D</span>
+          <div>
+            <p class="kicker">Admin lab</p>
+            <h1>Retrieval lab</h1>
+          </div>
+        </div>
+        <nav class="nav">
+          <a href="/">Chat</a>
+          <a href="/admin">Admin</a>
+        </nav>
+        <div class="status" id="status">
+          <span class="dot" data-state="unknown"></span>
+          <span id="status-label">Checking desk…</span>
+        </div>
+      </header>
+
+      <div class="layout">
+        <aside class="rail">
+          <section class="panel">
+            <h2>Space</h2>
+            <select id="lab-space"></select>
+            <p class="hint">Lab queries are scoped to one space after the appliance is set up.</p>
+          </section>
+          <section class="panel">
+            <h2>Search mode</h2>
+            <div class="segmented" role="radiogroup" aria-label="Retrieval mode">
+              <button type="button" class="seg active" data-mode="hybrid">Hybrid</button>
+              <button type="button" class="seg" data-mode="dense">Dense</button>
+              <button type="button" class="seg" data-mode="bm25">BM25</button>
+            </div>
+            <p class="hint">
+              Hybrid fuses meaning (dense) with exact tokens (BM25). Try
+              <code>PTO-12</code> versus a vague vacation question to see the modes diverge.
+            </p>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head">
+              <h2>Indexed files</h2>
+              <span class="count" id="file-count">0</span>
+            </div>
+            <ul class="file-list" id="file-list">
+              <li class="empty">Nothing indexed yet.</li>
+            </ul>
+            <div class="actions">
+              <button type="button" class="btn primary" id="ingest-btn">Ingest folder</button>
+              <label class="btn ghost">
+                Upload
+                <input id="file-input" type="file" multiple accept=".md,.txt,.pdf,.docx" hidden />
+              </label>
+            </div>
+            <p class="hint" id="ingest-status"></p>
+          </section>
+        </aside>
+
+        <main class="desk">
+          <div class="desk-bar">
+            <span class="desk-label">Inquiry</span>
+            <button type="button" class="btn ghost" id="reset-btn">New sheet</button>
+          </div>
+          <div class="thread" id="thread">
+            <div class="intro">
+              <p class="intro-kicker">Ask the handbook</p>
+              <h2>What do the internal docs say?</h2>
+              <p>
+                Answers are grounded in the indexed files for the selected space. Each reply shows
+                which file dense, BM25, and hybrid ranked first. Seed handbook: Northstar sample docs.
+              </p>
+              <div class="chips">
+                <button type="button" class="chip" data-q="What is PTO-12?">What is PTO-12?</button>
+                <button type="button" class="chip" data-q="How many vacation days do full-time employees get?">Vacation days</button>
+                <button type="button" class="chip" data-q="Who can approve a SOC 2 control exception?">SOC 2 exception</button>
+                <button type="button" class="chip" data-q="Who is on-call for a SEV-1?">Who is on-call for a SEV-1?</button>
+              </div>
+            </div>
+          </div>
+          <form class="composer" id="ask-form">
+            <label class="sr-only" for="question">Question</label>
+            <textarea
+              id="question"
+              name="question"
+              rows="2"
+              required
+              placeholder="Ask about PTO, on-call, SOC 2, expenses… Enter to ask, Shift+Enter for a new line"
+            ></textarea>
+            <button type="submit" class="btn primary" id="ask-btn">Ask</button>
+          </form>
+        </main>
+      </div>
+    </div>
+    <script src="/static/app.js"></script>
+  </body>
+</html>

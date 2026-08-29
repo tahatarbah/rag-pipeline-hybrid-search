@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sign in</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="frame narrow">
+      <div class="auth-logo">
+        <span class="mark">✦</span>
+      </div>
+      <form class="panel" id="login-form">
+        <h1 style="margin:0 0 8px;font-size:22px;text-align:center">Welcome back</h1>
+        <p class="hint" style="text-align:center;margin-bottom:16px">Sign in to chat with your internal docs.</p>
+        <label>Email <input name="email" type="email" required autocomplete="username" /></label>
+        <label>Password <input name="password" type="password" required autocomplete="current-password" /></label>
+        <p class="error" id="err"></p>
+        <button class="btn primary" type="submit" style="width:100%;margin-top:8px">Continue</button>
+        <p class="hint" id="oidc-wrap" hidden style="text-align:center">
+          <a id="oidc-link" href="#">Sign in with SSO</a>
+        </p>
+        <p class="hint" style="text-align:center">Demo people (if you loaded sample data):<br />maya@northstar.demo · jordan@northstar.demo · priya@northstar.demo<br />password <code>demo1234</code></p>
+      </form>
+    </div>
+    <script>
+      fetch("/api/auth/status")
+        .then((r) => r.json())
+        .then((d) => {
+          if (d.oidc_enabled) {
+            document.getElementById("oidc-wrap").hidden = false;
+            document.getElementById("oidc-link").addEventListener("click", async (e) => {
+              e.preventDefault();
+              const res = await fetch("/api/auth/oidc/start");
+              const data = await res.json();
+              if (data.url) location.href = data.url;
+            });
+          }
+        });
+      document.getElementById("login-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const err = document.getElementById("err");
+        const res = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: form.email.value, password: form.password.value }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          err.textContent = data.detail || "Sign-in failed";
+          return;
+        }
+        location.href = "/";
+      });
+    </script>
+  </body>
+</html>
